@@ -55,7 +55,7 @@ function searchNearestPOIs(lat, lng, poiType) {
   markersLayer.clearLayers();
 
   // 調用後端API獲取最近的POI
-  fetch(`http://localhost:3000/nearest-poi?lat=${lat}&lng=${lng}&poi_type=${poiType}`)
+  fetch(`http://localhost:3000/poi/nearest?lat=${lat}&lng=${lng}&poi_type=${poiType}`)
     .then(response => response.json())
     .then(data => {
       let infoHtml = `點擊座標：緯度 ${lat.toFixed(8)}，經度 ${lng.toFixed(8)}<br>最近的前10個POI：<ul>`;
