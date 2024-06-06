@@ -33,7 +33,6 @@ var select = document.getElementById('poiTypeSelect');
 var latInput = document.getElementById('latInput');
 var lngInput = document.getElementById('lngInput');
 var searchButton = document.getElementById('searchButton');
-var showTableButton = document.getElementById('showTableButton');
 
 // 監聽POI類型選擇改變事件
 select.addEventListener('change', function(e) {
@@ -55,10 +54,6 @@ searchButton.addEventListener('click', function() {
   }
 });
 
-showTableButton.addEventListener('click', function() {
-  $('#poiModal').modal('show');
-});
-
 // 查詢最近的POI
 function searchNearestPOIs(lat, lng, poiType) {
   // 清空現有標記
@@ -69,30 +64,33 @@ function searchNearestPOIs(lat, lng, poiType) {
   fetch(`http://localhost:3000/poi/nearest?lat=${lat}&lng=${lng}&poi_type=${poiType}`)
     .then(response => response.json())
     .then(data => {
-      let infoHtml = generatePOITable(data);
-      document.getElementById('info').innerHTML = infoHtml;
-      document.getElementById('modalInfo').innerHTML = infoHtml;
+      if (data && data.length > 0) {
+        let infoHtml = generatePOITable(data);
+        document.getElementById('info').innerHTML = infoHtml;
 
-      // 更新地圖圖例
-      updateLegend(new Set(data.map(poi => poi.poi_type)));
+        // 更新地圖圖例
+        updateLegend(new Set(data.map(poi => poi.poi_type)));
 
-      // 為每個表格行添加點擊事件
-      data.forEach((poi, index) => {
-        document.getElementById(`poi-${index}`).addEventListener('click', () => {
-          var marker = poiMarkers[index];
-          map.setView(marker.getLatLng(), 15);  // 跳轉到POI位置並放大地圖
-          marker.openPopup();  // 開啟POI的彈出訊息
+        // 為每個表格行添加點擊事件
+        data.forEach((poi, index) => {
+          document.getElementById(`poi-${index}`).addEventListener('click', () => {
+            var marker = poiMarkers[index];
+            map.setView(marker.getLatLng(), 15);  // 跳轉到POI位置並放大地圖
+            marker.openPopup();  // 開啟POI的彈出訊息
 
-          // 取消之前選中的標記樣式
-          Object.values(poiMarkers).forEach(m => m.getElement().classList.remove('highlight'));
-          // 添加選中標記的樣式
-          marker.getElement().classList.add('highlight');
+            // 取消之前選中的標記樣式
+            Object.values(poiMarkers).forEach(m => m.getElement().classList.remove('highlight'));
+            // 添加選中標記的樣式
+            marker.getElement().classList.add('highlight');
+          });
         });
-      });
+      } else {
+        document.getElementById('info').innerHTML = `沒有找到附近的 POI`;
+      }
     })
     .catch(error => {
       console.error('Error fetching nearest POI:', error);
-      document.getElementById('info').innerHTML += `<br>錯誤：無法獲取最近的POI`;
+      document.getElementById('info').innerHTML = `錯誤：無法獲取最近的POI`;
     });
 }
 
@@ -103,7 +101,6 @@ function generatePOITable(data) {
                         <th scope="col">名稱</th>
                         <th scope="col">類型</th>
                         <th scope="col">距離 (米)</th>
-                        <th scope="col">座標 (緯度, 經度)</th>
                       </tr>
                     </thead>
                     <tbody>`;
@@ -126,7 +123,6 @@ function generatePOITable(data) {
                    <td>${poi.name}</td>
                    <td>${poi.poi_type}</td>
                    <td>${poi.distance}</td>
-                   <td>(${poi.latitude.toFixed(6)}, ${poi.longitude.toFixed(6)})</td>
                  </tr>`;
   });
 

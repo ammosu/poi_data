@@ -19,6 +19,7 @@ body {
 
 #info, #modalInfo {
   overflow-y: auto;
+  max-height: 40vh; /* 添加這一行 */
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
@@ -49,11 +50,20 @@ body {
   }
 
   #showTableButton {
-    display: block;
+    display: none; /* 隱藏顯示表格按鈕 */
   }
 
   #info {
+    display: block; /* 顯示表格 */
+    max-height: 30vh; /* 限制表格高度 */
+  }
+
+  #latInput, #lngInput, label[for="latInput"], label[for="lngInput"] {
     display: none;
+  }
+
+  #legend {
+    display: none; /* 隱藏右下角圖例 */
   }
 }
 
