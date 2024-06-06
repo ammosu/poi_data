@@ -73,7 +73,7 @@ fileInput.addEventListener('change', function() {
       var formData = new FormData();
       formData.append("file", file);
 
-      fetch('http://localhost:3000/upload-poi', {
+      fetch('https://chienweichang-poi-data.hf.space/upload-poi', {
         method: 'POST',
         body: formData
       })
@@ -95,7 +95,7 @@ fileInput.addEventListener('change', function() {
 clearButton.addEventListener('click', function() {
   confirmationMessage.textContent = '確定要清除所有POI數據嗎？';
   confirmButton.onclick = function() {
-    fetch('http://localhost:3000/clear-kdtrees', {
+    fetch('https://chienweichang-poi-data.hf.space/clear-kdtrees', {
       method: 'POST'
     })
     .then(response => response.json())
@@ -118,7 +118,7 @@ function searchNearestPOIs(lat, lng, poiType) {
   poiMarkers = {};
 
   // 調用後端API獲取最近的POI
-  fetch(`http://localhost:3000/poi/nearest?lat=${lat}&lng=${lng}&poi_type=${poiType}`)
+  fetch(`https://chienweichang-poi-data.hf.space/poi/nearest?lat=${lat}&lng=${lng}&poi_type=${poiType}`)
     .then(response => response.json())
     .then(data => {
       if (data && data.length > 0) {
