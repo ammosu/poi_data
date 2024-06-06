@@ -33,6 +33,12 @@ var select = document.getElementById('poiTypeSelect');
 var latInput = document.getElementById('latInput');
 var lngInput = document.getElementById('lngInput');
 var searchButton = document.getElementById('searchButton');
+var uploadButton = document.getElementById('uploadButton');
+var clearButton = document.getElementById('clearButton');
+var fileInput = document.getElementById('fileInput');
+var confirmationModal = $('#confirmationModal');
+var confirmationMessage = document.getElementById('confirmationMessage');
+var confirmButton = document.getElementById('confirmButton');
 
 // 監聽POI類型選擇改變事件
 select.addEventListener('change', function(e) {
@@ -52,6 +58,57 @@ searchButton.addEventListener('click', function() {
   } else {
     alert('請輸入有效的經緯度');
   }
+});
+
+// 上傳POI數據
+uploadButton.addEventListener('click', function() {
+  fileInput.click();
+});
+
+fileInput.addEventListener('change', function() {
+  var file = fileInput.files[0];
+  if (file) {
+    confirmationMessage.textContent = '確定要上傳這個POI數據文件嗎？';
+    confirmButton.onclick = function() {
+      var formData = new FormData();
+      formData.append("file", file);
+
+      fetch('http://localhost:3000/upload-poi', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        confirmationModal.modal('hide');
+      })
+      .catch(error => {
+        console.error('Error uploading POI data:', error);
+        confirmationModal.modal('hide');
+        alert('上傳POI數據失敗');
+      });
+    };
+    confirmationModal.modal('show');
+  }
+});
+
+// 清除POI
+clearButton.addEventListener('click', function() {
+  confirmationMessage.textContent = '確定要清除所有POI數據嗎？';
+  confirmButton.onclick = function() {
+    fetch('http://localhost:3000/clear-kdtrees', {
+      method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+      confirmationModal.modal('hide');
+    })
+    .catch(error => {
+      console.error('Error clearing POI:', error);
+      confirmationModal.modal('hide');
+      alert('清除POI失敗');
+    });
+  };
+  confirmationModal.modal('show');
 });
 
 // 查詢最近的POI

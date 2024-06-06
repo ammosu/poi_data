@@ -19,11 +19,18 @@ body {
 
 #info, #modalInfo {
   overflow-y: auto;
-  max-height: 40vh; /* 添加這一行 */
+  max-height: 40vh; /* 通用最大高度 */
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
   background-color: #f9f9f9;
+}
+
+/* 桌面版表格高度 */
+@media (min-width: 769px) {
+  #info {
+    max-height: 20vh; /* 桌面版最大高度 */
+  }
 }
 
 .legend {
