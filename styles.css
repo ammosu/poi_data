@@ -41,3 +41,52 @@ body {
   z-index: 1000;
   pointer-events: none;
 }
+
+.custom-icon div {
+  display: inline-block;
+  border: 1px solid #555;
+  box-shadow: 0 0 2px rgba(0,0,0,0.5);
+}
+
+@keyframes highlight {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+
+#info table {
+  width: 100%;
+  margin-top: 10px;
+}
+
+#info th, #info td {
+  text-align: left;
+  padding: 8px;
+}
+
+#info th {
+  background-color: #f2f2f2;
+}
+
+.poi-row {
+  cursor: pointer;
+}
+
+.poi-row:hover {
+  background-color: #e0e0e0;
+}
+
+.poi-row:active {
+  background-color: #b0b0b0;
+}
+
+.custom-icon div {
+  display: inline-block;
+  border: 1px solid #555;
+  box-shadow: 0 0 2px rgba(0,0,0,0.5);
+}
+
+.custom-icon .highlight {
+  animation: highlight 0.6s ease-out;
+  border: 2px solid yellow;
+}
