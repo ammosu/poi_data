@@ -1,8 +1,28 @@
 // 初始化地圖
 var map = L.map('map').setView([23.5, 121], 8);
+console.log('地圖初始化成功'); // 調試代碼
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 18,
-}).addTo(map);
+  errorTileUrl: 'no-image-icon-23494.png' // 可選：設置錯誤時的替代圖像
+}).addTo(map).on('tileerror', function(error) {
+  console.error('地圖圖層加載失敗', error); // 調試代碼
+});
+console.log('圖層添加成功'); // 調試代碼
+
+// 測試地圖圖層加載
+fetch('https://a.tile.openstreetmap.org/0/0/0.png')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.blob();
+  })
+  .then(blob => {
+    console.log('地圖圖層加載成功');
+  })
+  .catch(error => {
+    console.error('地圖圖層加載失敗', error);
+  });
 
 // 定義顏色對應的poi_type
 var poiTypeColors = {
