@@ -27,6 +27,7 @@ var poiTypeColors = {
 // 創建標記圖層
 var markersLayer = L.layerGroup().addTo(map);
 var poiMarkers = {};
+var selectedMarker = null; // 用於保存所選位置的標記
 
 // 動態生成下拉選單選項
 var select = document.getElementById('poiTypeSelect');
@@ -54,6 +55,7 @@ searchButton.addEventListener('click', function() {
   var poiType = select.value;
 
   if (!isNaN(lat) && !isNaN(lng)) {
+    setMarker(lat, lng);
     searchNearestPOIs(lat, lng, poiType);
   } else {
     alert('請輸入有效的經緯度');
@@ -196,8 +198,26 @@ map.on('click', function(e) {
   latInput.value = lat.toFixed(6);
   lngInput.value = lng.toFixed(6);
 
+  setMarker(lat, lng);
   searchNearestPOIs(lat, lng, poiType);
 });
+
+// 在地圖上設置或更新標記
+function setMarker(lat, lng) {
+  if (selectedMarker) {
+    map.removeLayer(selectedMarker);
+  }
+  selectedMarker = L.marker([lat, lng], { 
+    icon: L.icon({ 
+      iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png', 
+      shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png', 
+      iconAnchor: [12, 41], // 設置圖標的錨點為圖標底部中心
+      shadowAnchor: [13, 41], // 設置陰影的錨點為陰影底部中心
+      popupAnchor: [0, -41] // 設置彈出框的錨點為圖標頂部
+    }) 
+  }).addTo(map);
+  map.setView([lat, lng], 15);  // 跳轉到所選位置並放大地圖
+}
 
 // 更新地圖圖例
 function updateLegend(displayedTypes) {
