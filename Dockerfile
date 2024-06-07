@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # 暴露應用運行的端口
-EXPOSE 8080
+EXPOSE 7860
 
 # 運行應用程序
-CMD ["npx", "http-server", "-p", "8080"]
+CMD ["npx", "http-server", "-p", "7860"]
